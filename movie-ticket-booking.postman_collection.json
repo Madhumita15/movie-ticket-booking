@@ -1,0 +1,501 @@
+{
+  "info": {
+    "_postman_id": "0ba571d6-6ade-4719-b173-a3d1fbfc9ada",
+    "name": "movie-ticket-booking",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55836944",
+    "_collection_link": "https://go.postman.co/collection/55836944-0ba571d6-6ade-4719-b173-a3d1fbfc9ada?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"madhu1@yopmail.com\",\r\n    \"password\": \"Madhu1@123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3007/api/v1/auth/login",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "verify-email",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"madhu1@yopmail.com\",\r\n    \"otp\": \"4778\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3007/api/v1/auth/verify-email",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "verify-email"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "register",
+      "request": {
+        "auth": {
+          "type": "bearer"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"madhu1@yopmail.com\",\r\n    \"name\": \"Madhu1 Das\",\r\n    \"phone\": \"9846078293\",\r\n    \"password\": \"Madhu1@123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3007/api/v1/auth/register",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create movie by admin",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_1c0s}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Beyond the Stars\",\r\n  \"genre\": [\"Sci-Fi\", \"Adventure\"],\r\n  \"language\": \"English\",\r\n  \"duration\": 135,\r\n  \"cast\": [\r\n    \"Daniel Carter\",\r\n    \"Emma Wilson\",\r\n    \"Robert Hayes\"\r\n  ],\r\n  \"director\": \"Christopher Miller\",\r\n  \"releaseDate\": \"2026-09-20\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3007/api/v1/movies",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "movies"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "theater create by admin",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_1c0s}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"theaterName\": \"Miraj Cinemas\",\r\n  \"location\": \"Barasat, West Bengal\",\r\n  \"numberOfScreens\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3007/api/v1/theaters",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "theaters"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "show creation",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_1c0s}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"movieId\": \"6ae758afa313a8e6a1b5a536\",\r\n  \"theaterId\": \"6ae759edf45591159556a673\",\r\n  \"screenNumber\": 1,\r\n  \"showTiming\": \"2026-11-05T13:00:00+05:30\",\r\n  \"totalSeats\": 150\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3007/api/v1/shows",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "shows"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get all shows",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_1c0s}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:3007/api/v1/shows",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "shows"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get all movies",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_1c0s}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:3007/api/v1/movies",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "movies"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get movie by id",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_1c0s}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:3007/api/v1/movies/6ae758afa313a8e6a1b5a536",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "movies",
+            "6ae758afa313a8e6a1b5a536"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete movie by admin",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_18t2}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "localhost:3007/api/v1/movies/6ae791ac64b7add731077d66",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "movies",
+            "6ae791ac64b7add731077d66"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get all theater by admin",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_1dx9}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:3007/api/v1/theaters",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "theaters"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ticket booking by user",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_15pb}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"showId\": \"6ae75c0d68f15dfbb6d5972b\",\r\n    \"numberOfTicket\": 5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3007/api/v1/bookings",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "bookings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get bookings by user",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_15pb}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:3007/api/v1/user/bookings",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "bookings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "cancel tickt booking by user",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_15pb}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"status\": \"cancelled\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3007/api/v1/bookings/6ae8c4404a5efb9ff4c2a6e8",
+          "host": [
+            "localhost"
+          ],
+          "port": "3007",
+          "path": [
+            "api",
+            "v1",
+            "bookings",
+            "6ae8c4404a5efb9ff4c2a6e8"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_1c0s",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_18t2",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_1dx9",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_15pb",
+      "secret": true
+    }
+  ]
+}
