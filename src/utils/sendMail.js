@@ -154,6 +154,163 @@ class SendMail {
       throw error;
     }
   }
+
+
+  
+static async sendBookingSummary({user, bookings}) {
+  try {
+    const bookingRows = bookings.map((booking, index) => {
+      const movieName = booking.movie?.name || "N/A";
+      const theaterName = booking.theater?.theaterName || "N/A";
+
+      const showTiming = booking.show?.showTiming
+        ? new Date(booking.show.showTiming).toLocaleString("en-IN", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          })
+        : "N/A";
+
+      const tickets = booking.numberOfTicket || 0;
+      const status = booking.status || "N/A";
+
+      const statusColor =
+        status === "confirmed" ? "#16a34a" : "#dc2626";
+
+      return `
+        <tr>
+          <td style="padding:12px;border:1px solid #ddd;">${index + 1}</td>
+          <td style="padding:12px;border:1px solid #ddd;">${movieName}</td>
+          <td style="padding:12px;border:1px solid #ddd;">${theaterName}</td>
+          <td style="padding:12px;border:1px solid #ddd;">${showTiming}</td>
+          <td style="padding:12px;border:1px solid #ddd;text-align:center;">${tickets}</td>
+          <td style="padding:12px;border:1px solid #ddd;color:${statusColor};font-weight:bold;">
+            ${status}
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    const totalBookings = bookings.length;
+
+    const totalTickets = bookings.reduce(
+      (total, booking) => total + (booking.numberOfTicket || 0),
+      0
+    );
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM,
+      to: user.email,
+      subject: "Your Movie Booking Summary",
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Booking Summary</title>
+        </head>
+
+        <body style="
+          margin:0;
+          padding:20px;
+          background-color:#f4f6f8;
+          font-family:Arial,Helvetica,sans-serif;
+          color:#333;
+        ">
+
+          <div style="
+            max-width:750px;
+            margin:20px auto;
+            background:#ffffff;
+            border-radius:10px;
+            overflow:hidden;
+          ">
+
+            <div style="
+              background:#4f46e5;
+              padding:25px;
+              text-align:center;
+            ">
+              <h1 style="margin:0;color:#fff;">
+                Booking Summary
+              </h1>
+            </div>
+
+            <div style="padding:25px;">
+
+              <h2>Hello ${user.name},</h2>
+
+              <p>
+                Here is the summary of all your movie bookings.
+                Thank you for choosing our booking service!
+              </p>
+
+              <div style="overflow-x:auto;">
+                <table style="
+                  width:100%;
+                  border-collapse:collapse;
+                  margin-top:20px;
+                  font-size:13px;
+                  text-align:left;
+                ">
+                  <thead>
+                    <tr style="background:#f3f4f6;">
+                      <th style="padding:12px;border:1px solid #ddd;">#</th>
+                      <th style="padding:12px;border:1px solid #ddd;">Movie</th>
+                      <th style="padding:12px;border:1px solid #ddd;">Theater</th>
+                      <th style="padding:12px;border:1px solid #ddd;">Show Timing</th>
+                      <th style="padding:12px;border:1px solid #ddd;">Tickets</th>
+                      <th style="padding:12px;border:1px solid #ddd;">Status</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    ${bookingRows}
+                  </tbody>
+                </table>
+              </div>
+
+              <div style="
+                margin-top:25px;
+                padding:18px;
+                background:#f3f4f6;
+                border-radius:8px;
+              ">
+                <p><strong>Total Bookings:</strong> ${totalBookings}</p>
+                <p><strong>Total Tickets:</strong> ${totalTickets}</p>
+              </div>
+
+              <p style="margin-top:25px;">
+                Thank you,<br />
+                <strong>Admin Team</strong>
+              </p>
+
+            </div>
+
+            <div style="
+              background:#f8f9fa;
+              padding:18px;
+              text-align:center;
+              color:#888;
+              font-size:12px;
+            ">
+              This is an automated email. Please do not reply.
+            </div>
+
+          </div>
+
+        </body>
+        </html>
+      `,
+    });
+
+    return true;
+
+  } catch (error) {
+    throw error;
+  }
+}
+
 }
 
 module.exports = SendMail;

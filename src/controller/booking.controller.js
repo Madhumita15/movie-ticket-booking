@@ -1,5 +1,6 @@
 const { createBookingService, cancelBookingService, getAllBookingHistoryService, getBookingHistoryByUserIdService } = require("../service/booking.service")
 const httpStatusCode = require("../utils/httpStatusCode")
+const SendMail = require("../utils/sendMail")
 
 class BookingController{
     async createBooking(req, res){
@@ -42,6 +43,21 @@ class BookingController{
      async getAllBookingHistoryByUserId(req, res){
         const userId = req.user._id
         const {bookings, source} = await getBookingHistoryByUserIdService(userId)
+         return res.status(httpStatusCode.OK).json({
+            success: true,
+            message: "Booking fetched successfully!",
+            source: source,
+            data: bookings
+        })
+
+
+    }
+
+
+    async getAllBookingHistoryByUserIdEmail(req, res){
+        const userId = req.user._id
+        const {bookings, source} = await getBookingHistoryByUserIdService(userId)
+        await SendMail.sendBookingSummary({user: req.user, bookings: bookings})
          return res.status(httpStatusCode.OK).json({
             success: true,
             message: "Booking fetched successfully!",

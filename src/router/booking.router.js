@@ -36,4 +36,10 @@ router.get(
   asyncHandeler(bookingController.getAllBookingHistoryByUserId),
 );
 
+router.post(
+  "/user/bookings/email-summary",
+  authMiddleware.verifyToken,
+  authMiddleware.rolecheck("user"),
+  asyncHandeler(bookingController.getAllBookingHistoryByUserIdEmail),
+);
 module.exports = router;

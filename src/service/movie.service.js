@@ -56,7 +56,7 @@ const getAllMoviesService = async () => {
   if (movieCache) {
     return { movies: movieCache, source: "redis" };
   }
-   const movies = await Movie.aggregate([
+  const movies = await Movie.aggregate([
     // 1. Find all shows belonging to each movie
     {
       $lookup: {
@@ -91,6 +91,38 @@ const getAllMoviesService = async () => {
         preserveNullAndEmptyArrays: true,
       },
     },
+
+    // {
+    //   $lookup: {
+    //     from: "bookings",
+    //     localField: "shows._id",
+    //     foreignField: "showId",
+    //     pipeline: [
+    //       // Only count confirmed bookings
+    //       {
+    //         $match: {
+    //           status: "confirmed",
+    //         },
+    //       },
+    //       {
+    //         $group: {
+    //           _id: null,
+    //           totalBookings: { $sum: 1 },
+    //           totalTickets: { $sum: "$numberOfTicket" },
+    //         },
+    //       },
+    //     ],
+    //     as: "bookingStats",
+    //   },
+    // },
+
+    // {
+    //   $project: {
+    //     name: 1,
+    //     showId: "$shows._id",
+    //     bookingStats: 1,
+    //   },
+    // },
 
     // 4. Group shows by theater
     {
@@ -177,13 +209,11 @@ const getAllMoviesService = async () => {
   return { movies, source: "mongoDB" };
 };
 
-  
-
 const getMovieByIdService = async (movieId) => {
-    const movieCacheId = await getMovieCacheById(movieId);
-    if (movieCacheId) {
-      return { movie: movieCacheId, source: "redis" };
-    }
+  const movieCacheId = await getMovieCacheById(movieId);
+  if (movieCacheId) {
+    return { movie: movieCacheId, source: "redis" };
+  }
 
   const movieById = await Movie.aggregate([
     {
@@ -212,7 +242,7 @@ const getMovieByIdService = async (movieId) => {
     throw error;
   }
 
-    await setMovieCacheById(movieById);
+  await setMovieCacheById(movieById);
   return { movie: movieById[0], source: "mongoDB" };
 };
 
@@ -256,26 +286,26 @@ const updateMovieService = async ({
     await cloudinary.uploader.destroy(oldPosterImageId);
   }
   await clearMovieCache();
-  await clearMovieCacheById({movieId: movie._id});
+  await clearMovieCacheById({ movieId: movie._id });
   return movie;
 };
 
 const deleteMovieService = async (id) => {
-    const movie = await Movie.findById(new mongoose.Types.ObjectId(id))
-    if(!movie){
-        const error = new Error("Movie not found")
-        error.statusCode = httpStatusCode.NOT_FOUND
-        throw error
-    }
+  const movie = await Movie.findById(new mongoose.Types.ObjectId(id));
+  if (!movie) {
+    const error = new Error("Movie not found");
+    error.statusCode = httpStatusCode.NOT_FOUND;
+    throw error;
+  }
 
-    if(movie.poster_image){
-        await cloudinary.uploader.destroy(movie.poster_public_id)
-    }
+  if (movie.poster_image) {
+    await cloudinary.uploader.destroy(movie.poster_public_id);
+  }
 
-    await Movie.findByIdAndDelete(id)
-    await clearMovieCache()
-    await clearMovieCacheById({movieId: movie._id})
-    return
+  await Movie.findByIdAndDelete(id);
+  await clearMovieCache();
+  await clearMovieCacheById({ movieId: movie._id });
+  return;
 };
 
 module.exports = {
