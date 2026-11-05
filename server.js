@@ -7,6 +7,9 @@ const app = require('./src/app');
 const dbCon = require('./src/config/dbCon');
 
 
+module.exports = app
+
+
 const startServer = async()=>{
     const PORT = process.env.PORT
     await dbCon()

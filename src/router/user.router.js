@@ -22,11 +22,66 @@ const uploadMiddleware = (req, res, next)=>{
     })
 }
 
+
+/**
+ * @swagger
+ * /api/v1/user/profile:
+ *   get:
+ *     summary: get user profile
+ *     tags:
+ *       - Authenticated User
+ *     security:
+ *       - AccessTokenAuth: []
+ *     responses:
+ *       200:
+ *         description: User get successfully
+ *       500:
+ *         description: Internal Server Error
+ */
 router.get(
   "/user/profile",
   AuthMiddleware.verifyToken,
   asyncHandeler(userController.getProfile),
 );
+
+
+
+/**
+ * @swagger
+ * /api/v1/user/profile:
+ *   patch:
+ *     summary: Update User Profile
+ *     tags:
+ *       - Authenticated User  
+ *     security:
+ *       - AccessTokenAuth: []  
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 required: true
+ *               phone:
+ *                 type: string
+ *                 required: true
+ *               profile_image:
+ *                 type: file
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       400:
+ *         description: Validation error / Bad request
+ *       401:
+ *         description: Invalid or missing JWT
+ *       404:
+ *         description: User not fund 
+ *       500:
+ *         description: Internal Server Error
+ */
 router.patch(
   "/user/profile",
   AuthMiddleware.verifyToken,

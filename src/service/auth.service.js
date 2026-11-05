@@ -1,8 +1,9 @@
 const User = require('../models/user.model')
-const generateToken = require('../utils/generateToken')
 const httpStatusCode = require('../utils/httpStatusCode')
 const sendEmail = require('../utils/sendMail')
 const { getCache } = require('../utils/redisCache')
+const {generateAccessToken, generateRefreshToken} = require('../utils/generateToken')
+const JWT = require('jsonwebtoken')
 
 
 
@@ -87,12 +88,41 @@ const loginService = async({password, email})=>{
         throw error
 
     }
+    
 
-    const token = generateToken(user)
-    return {token, user}
+    const accessToken = generateAccessToken(user)
+    const refreshToken = generateRefreshToken(user)
+    user.refreshToken= refreshToken
+    await user.save()
+    return {accessToken, refreshToken, user}
 
 
 }
 
 
-module.exports = {registerService, loginService, emailVerifyService}
+const refreshTokenService = async(refreshToken)=>{
+    console.log("refresh", refreshToken)
+    if(!refreshToken){
+        const error = new Error("Refresh token not provided")
+        error.statusCode = httpStatusCode.BAD_REQUEST
+        throw error
+    }
+    
+    const cleanToken = refreshToken.split(" ")[1]
+    const decode = JWT.verify(cleanToken, process.env.JWT_REFRESH_SECRET_KEY)
+    const user = await User.findById(decode._id)
+    if(!user){
+        const error = new Error("User not found")
+        error.statusCode = httpStatusCode.NOT_FOUND
+        throw error
+
+    }
+
+    const newAccessToken = generateAccessToken(user)
+    return newAccessToken
+
+
+}
+
+
+module.exports = {registerService, loginService, emailVerifyService, refreshTokenService}

@@ -2,6 +2,7 @@ const {
   registerService,
   emailVerifyService,
   loginService,
+  refreshTokenService,
 } = require("../service/auth.service");
 const httpStatusCode = require("../utils/httpStatusCode");
 
@@ -27,11 +28,12 @@ class AuthController {
   
   async login(req, res) {
     const { email, password } = req.body;
-    const { token, user } = await loginService({ email, password });
+    const { accessToken, refreshToken, user } = await loginService({ email, password });
     return res.status(httpStatusCode.OK).json({
       success: true,
       message: "Login successfully!",
-      token: token,
+      accessToken: accessToken,
+      refreshToken:refreshToken,
       data: {
         email: user.email,
         name: user.name,
@@ -39,6 +41,20 @@ class AuthController {
         phone: user.phone,
       },
     });
+  }
+
+
+  async refreshToken(req, res){
+    const refreshToken = req.headers.authorization
+    const accessToken = await refreshTokenService(refreshToken)
+    return res.status(httpStatusCode.OK).json({
+      success: true,
+      accessToken: accessToken,
+      message: "New accessToken generate successfully!"
+
+
+    })
+    
   }
 }
 

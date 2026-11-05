@@ -5,15 +5,16 @@ const User = require("../models/user.model");
 class AuthMiddleware {
   static async verifyToken(req, res, next) {
     try {
-      const token = req.headers.authorization;
-      if (!token || !token.startsWith("Bearer ")) {
+      const accessToken = req.headers.authorization;
+      console.log("token", accessToken);
+      if (!accessToken || !accessToken.startsWith("Bearer ")) {
         return res.status(httpStatusCode.UNAUTHORIZED).json({
           success: false,
           message: "Token not provided",
         });
       }
-      const cleanToken = token.split(" ")[1];
-      const decode = jwt.verify(cleanToken, process.env.JWT_SECRET_KEY);
+      const cleanToken = accessToken.split(" ")[1];
+      const decode = jwt.verify(cleanToken, process.env.JWT_ACCESS_SECRET_KEY);
       const user = await User.findById(decode._id);
       if (!user) {
         return res.status(httpStatusCode.NOT_FOUND).json({
@@ -21,7 +22,6 @@ class AuthMiddleware {
           message: "User not found",
         });
       }
-
       req.user = {
         role: user.role,
         _id: user._id,
@@ -46,7 +46,7 @@ class AuthMiddleware {
         });
       }
 
-      next()
+      next();
     };
   }
 }

@@ -1,0 +1,65 @@
+
+{
+  "definition": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Ticket Booking API",
+      "version": "1.0.0",
+      "description": "API documentation for admin and user management",
+      "contact": {
+        "name": "Madhumita Das"
+      }
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3007",
+        "description": "Development server"
+      },
+      {
+        "url": "https://your-production-domain.com",
+        "description": "Production server"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Admin",
+        "description": "Admin management APIs"
+      },
+      {
+        "name": "User",
+        "description": "User management APIs"
+      },
+      {
+        "name": "Authentication",
+        "description": "Login and authentication APIs"
+      },
+      {
+        "name": "Authenticated User",
+        "description": "Accessible by all authenticated users"
+      }
+    ],
+    "components": {
+      "securitySchemes": {
+        "AccessTokenAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT",
+          "description": "Enter your JWT access token"
+        },
+        "RefreshTokenAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT",
+          "description": "Enter your JWT refresh token"
+        },
+        "ApiKeyAuth": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "x-api-key",
+          "description": "API key authentication"
+        }
+      }
+    }
+  },
+  "apis": ["./src/router/*.js"]
+}
