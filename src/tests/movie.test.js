@@ -37,7 +37,7 @@ describe("Movie crud API", () => {
         language: "Bengali",
       })
       .set("Authorization", `Bearer ${accessToken}`);
-
+console.log("response body", res.body)
     expect(res.statusCode).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data.name).toBe("movie1");

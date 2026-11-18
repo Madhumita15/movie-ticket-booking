@@ -9,15 +9,15 @@ class Validation {
       req.body = req.body || {}
       if (req.body.genre || req.body.cast) {
         try {
-          req.body.genre = req.body.genre.split(",").map(item => item.trim());
-          req.body.cast = req.body.cast.split(",").map(item => item.trim());
-          // if (typeof req.body.genre === "string") {
-          //   req.body.genre = JSON.parse(req.body.genre);
-          // }
+          // req.body.genre = req.body.genre.split(",").map(item => item.trim());
+          // req.body.cast = req.body.cast.split(",").map(item => item.trim());
+          if (typeof req.body.genre === "string") {
+            req.body.genre = JSON.parse(req.body.genre);
+          }
 
-          // if (typeof req.body.cast === "string") {
-          //   req.body.cast = JSON.parse(req.body.cast);
-          // }
+          if (typeof req.body.cast === "string") {
+            req.body.cast = JSON.parse(req.body.cast);
+          }
         } catch {
           return res.status(400).json({
             success: false,

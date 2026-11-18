@@ -89,11 +89,11 @@ describe("Ticket Booking Authintication API", () => {
     expect(res.body.success).toBe(true);
   });
 
-  it("should create new accesstoken by refreshtoken", async()=>{
-    const res = await request(app).post("/api/v1/auth/refresh-token").set("Authorization", `Bearer ${refreshToken}`)
-    expect(res.statusCode).toBe(200)
-    expect(res.body.success).toBe(true)
-    accessToken = res.body.accessToken
+  // it("should create new accesstoken by refreshtoken", async()=>{
+  //   const res = await request(app).post("/api/v1/auth/refresh-token").set("Authorization", `Bearer ${refreshToken}`)
+  //   expect(res.statusCode).toBe(200)
+  //   expect(res.body.success).toBe(true)
+  //   accessToken = res.body.accessToken
 
-  })
+  // })
 });

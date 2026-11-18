@@ -10,14 +10,14 @@ const dbCon = require('./src/config/dbCon');
 module.exports = app
 
 
-const startServer = async()=>{
-    const PORT = process.env.PORT
-    await dbCon()
-    await redis.ping()
-    app.listen(PORT, ()=>{
-        console.log(`app is listening on http://localhost:${PORT}`)
-    })
+// const startServer = async()=>{
+//     const PORT = process.env.PORT
+//     await dbCon()
+//     await redis.ping()
+//     app.listen(PORT, ()=>{
+//         console.log(`app is listening on http://localhost:${PORT}`)
+//     })
 
 
-}
-startServer()
+// }
+// startServer()
