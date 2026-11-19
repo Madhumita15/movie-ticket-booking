@@ -1,8 +1,14 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
-console.log("SMTP HOST:", process.env.EMAIL_HOST);
-console.log("SMTP USER:", !!process.env.EMAIL_USER);
-console.log("SMTP PASS:", !!process.env.EMAIL_PASS);
+const dns = require("dns");
+
+dns.promises.lookup(process.env.EMAIL_HOST)
+    .then((result) => {
+        console.log("SMTP DNS resolved:", result);
+    })
+    .catch((error) => {
+        console.error("SMTP DNS failed:", error.code);
+    });
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
