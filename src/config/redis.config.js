@@ -52,11 +52,15 @@ redis.on("ready", () => {
 });
 
 redis.on("error", (error) => {
-  console.error("Redis error:", error);
+  if (process.env.NODE_ENV !== "test") {
+    console.error("Redis error:", error);
+  }
 });
 
-// redis.on("close", () => {
-//   console.log("Redis closed");
-// });
+redis.on("close", () => {
+  if (process.env.NODE_ENV !== "test") {
+    console.error("Redis close");
+  }
+});
 
 module.exports = redis;

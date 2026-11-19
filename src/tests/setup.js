@@ -39,7 +39,7 @@ afterAll(async () => {
     if (redis.status === "ready") {
       await redis.quit();
     } else if (redis.status !== "end") {
-      redis.disconnect();
+      await redis.disconnect();
     }
   }
 });

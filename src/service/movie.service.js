@@ -8,7 +8,7 @@ const {
   clearMovieCacheById,
   setMovieCacheById,
   getMovieCacheById,
-} = require("./movieCache.Service");
+} = require("./movieCache.service");
 const cloudinary = require("../config/cloudinary.config");
 
 const createMovieService = async ({
