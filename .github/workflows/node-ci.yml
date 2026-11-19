@@ -1,3 +1,13 @@
+# on: GitHub watches for push and pull request events on the main branch.
+# runs-on: GitHub provides a temporary Ubuntu machine to execute your workflow.
+# checkout: Downloads your repository code into that machine.
+# setup-node: Installs the specified Node.js version.
+# npm ci: Installs dependencies based on your lockfile.
+# tsc: Checks TypeScript errors.
+# npm test: Executes your automated tests.
+# npm run build: Builds your application.
+
+
 
 name: Ticket Booking CI/CD
 
@@ -11,13 +21,29 @@ on:
       - main
 
 jobs:
-
   test:
     name: Run Backend Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      mongodb:
+        image: mongo:8
+        ports:
+          - 27017:27017
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+
+    env:
+      NODE_ENV: test
+      MONGODB_TEST_URI: mongodb://127.0.0.1:27017/movie-ticket-booking-testing
+      REDIS_HOST: 127.0.0.1
+      REDIS_PORT: 6379
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -33,15 +59,13 @@ jobs:
       - name: Run Jest Tests
         run: npm test
 
-      - name: Generate Coverage
-        run: npm run test:coverage
-
       - name: Upload Coverage Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: jest-coverage-report
           path: coverage/
+          if-no-files-found: ignore
 
   build:
     name: Build Project
@@ -49,14 +73,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - name: Install Dependencies
@@ -74,7 +97,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Deployment Status
         run: |
           echo "===================================="

@@ -1,23 +1,62 @@
-const Redis = require('ioredis')
+// const Redis = require('ioredis')
+// const redis = new Redis({
+//     host: process.env.REDIS_HOST,
+//     port: process.env.REDIS_PORT,
+// })
+
+// redis.on("connect", ()=>{
+//     console.log("Redis connected")
+// })
+
+// redis.on("error", (error)=>{
+//     console.log("Redis error", error)
+// })
+
+// redis.on("ready", ()=>{
+//     console.log("Redis ready")
+// })
+
+// redis.on("close", ()=>{
+//     console.log("Redis closed")
+// })
+
+// module.exports = redis
+
+
+
+
+
+const Redis = require("ioredis");
+
 const redis = new Redis({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-})
+  host: process.env.REDIS_HOST || "127.0.0.1",
+  port: Number(process.env.REDIS_PORT) || 6379,
 
-redis.on("connect", ()=>{
-    console.log("Redis connected")
-})
+  connectTimeout: 10000,
 
-redis.on("error", (error)=>{
-    console.log("Redis error", error)
-})
+  retryStrategy(times) {
+    if (times > 5) {
+      return null;
+    }
 
-redis.on("ready", ()=>{
-    console.log("Redis ready")
-})
+    return Math.min(times * 200, 2000);
+  },
+});
 
-redis.on("close", ()=>{
-    console.log("Redis closed")
-})
+redis.on("connect", () => {
+  console.log("Redis connected");
+});
 
-module.exports = redis
+redis.on("ready", () => {
+  console.log("Redis ready");
+});
+
+redis.on("error", (error) => {
+  console.error("Redis error:", error);
+});
+
+// redis.on("close", () => {
+//   console.log("Redis closed");
+// });
+
+module.exports = redis;
