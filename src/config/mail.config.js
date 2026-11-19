@@ -1,5 +1,9 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
+console.log("SMTP HOST:", process.env.EMAIL_HOST);
+console.log("SMTP USER:", !!process.env.EMAIL_USER);
+console.log("SMTP PASS:", !!process.env.EMAIL_PASS);
+
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: process.env.EMAIL_PORT,
