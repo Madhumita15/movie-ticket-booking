@@ -1,4 +1,6 @@
-require('dotenv').config()
+if (!process.env.CI) {
+    require('dotenv').config({ quiet: true });
+}
 const dns = require("dns");
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 const redis = require('./src/config/redis.config')

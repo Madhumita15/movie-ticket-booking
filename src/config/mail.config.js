@@ -1,4 +1,6 @@
-require("dotenv").config();
+if (!process.env.CI) {
+    require('dotenv').config({ quiet: true });
+}
 const nodemailer = require("nodemailer");
 
 

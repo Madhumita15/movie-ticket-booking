@@ -1,3 +1,4 @@
+
 const transporter = require("../config/mail.config");
 const generateOtp = require("./generateOtp");
 
