@@ -11,7 +11,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(router)
-
+console.log("app")
 app.use(errorHandeler)
 
 
