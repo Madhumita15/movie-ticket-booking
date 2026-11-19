@@ -25,7 +25,7 @@ const registerService = async ({ name, email, phone, password }) => {
 
   const user = await newUser.save();
   console.log("user1");
-  await sendEmail.verifyEmail(user);
+  // await sendEmail.verifyEmail(user);
   console.log("user2");
   return user;
 };

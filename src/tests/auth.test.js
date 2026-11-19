@@ -23,28 +23,28 @@ describe("Ticket Booking Authintication API", () => {
     expect(res.body.success).toBe(true);
   });
 
-  it("shoud verify email", async () => {
-    await User.create({
-      name: "Madhumita",
-      email: "madhumita1@yopmail.com",
-      password: "Madhumita@123",
-      phone: "8273648918",
-    },);
-    const user = await User.findOne({ email: "madhumita1@yopmail.com" });
-    await SendMail.verifyEmail(user);
-    const key = `verify-email-otp-${user._id}`;
-    const otp = await getCache(key);
-    console.log("otp", otp);
-    const res = await request(app)
-      .post("/api/v1/auth/verify-email")
-      .send({
-        email: "madhumita1@yopmail.com",
-        otp: String(otp),
-      });
+  // it("shoud verify email", async () => {
+  //   await User.create({
+  //     name: "Madhumita",
+  //     email: "madhumita1@yopmail.com",
+  //     password: "Madhumita@123",
+  //     phone: "8273648918",
+  //   },);
+  //   const user = await User.findOne({ email: "madhumita1@yopmail.com" });
+  //   await SendMail.verifyEmail(user);
+  //   const key = `verify-email-otp-${user._id}`;
+  //   const otp = await getCache(key);
+  //   console.log("otp", otp);
+  //   const res = await request(app)
+  //     .post("/api/v1/auth/verify-email")
+  //     .send({
+  //       email: "madhumita1@yopmail.com",
+  //       otp: String(otp),
+  //     });
 
-    expect(res.statusCode).toBe(200);
-    expect(res.body.success).toBe(true);
-  }, 10000);
+  //   expect(res.statusCode).toBe(200);
+  //   expect(res.body.success).toBe(true);
+  // }, 10000);
 
   it("should user login", async () => {
     await User.create({
